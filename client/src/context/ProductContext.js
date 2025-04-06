@@ -8,11 +8,13 @@ export const ProductProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({});
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (filters) => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/products');
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await axios.get(`/api/products?${queryParams}`);
       setProducts(response.data);
     } catch (err) {
       setError('Failed to fetch products');
@@ -28,6 +30,11 @@ export const ProductProvider = ({ children }) => {
     } catch (err) {
       setError('Failed to fetch categories');
     }
+  };
+
+  const updateFilters = (newFilters) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+    fetchProducts({ ...filters, ...newFilters }); // Fetch products with updated filters
   };
 
   useEffect(() => {
@@ -68,7 +75,8 @@ export const ProductProvider = ({ children }) => {
         error,
         fetchProduct,
         updateProduct,
-        fetchProducts 
+        fetchProducts,
+        updateFilters
       }}
     >
       {children}

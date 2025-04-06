@@ -2,11 +2,12 @@ import { useContext } from 'react';
 import { ProductContext } from '../context/ProductContext';
 
 const ProductFilter = () => {
-  const { categories, loading } = useContext(ProductContext);
+  const { categories, updateFilters } = useContext(ProductContext);
 
-  if (loading) {
-    return <div>Loading categories...</div>; // Show loading state
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    updateFilters({ [name]: value });
+  };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
@@ -21,6 +22,7 @@ const ProductFilter = () => {
           <select
             id="category"
             name="category"
+            onChange={handleChange}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
           >
             <option value="">All Categories</option>
