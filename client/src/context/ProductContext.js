@@ -35,8 +35,42 @@ export const ProductProvider = ({ children }) => {
     fetchCategories();
   }, []);
 
+  const fetchProduct = async (id) => {
+    try {
+      const response = await axios.get(`/api/products/${id}`);
+      return response.data;
+    } catch (err) {
+      throw new Error('Failed to fetch product details');
+    }
+  };
+
+  const updateProduct = async (id, productData, token) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const response = await axios.put(`/api/products/${id}`, productData, config);
+      return response.data;
+    } catch (err) {
+      throw new Error(err.response?.data?.message || 'Failed to update product');
+    }
+  };
+
   return (
-    <ProductContext.Provider value={{ products, categories, loading, error }}>
+    <ProductContext.Provider 
+      value={{ 
+        products, 
+        categories, 
+        loading, 
+        error,
+        fetchProduct,
+        updateProduct,
+        fetchProducts 
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );

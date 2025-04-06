@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 const EditProduct = () => {
   const { id } = useParams();
-  const { categories, fetchProduct, updateProduct } = useContext(ProductContext);
+  const { fetchProduct, updateProduct, categories } = useContext(ProductContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   
@@ -21,7 +21,6 @@ const EditProduct = () => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch product data on component mount
   useEffect(() => {
     const getProduct = async () => {
       try {
@@ -36,7 +35,7 @@ const EditProduct = () => {
         });
         setLoading(false);
       } catch (err) {
-        setError('Failed to load product data');
+        setError('Failed to load product details');
         setLoading(false);
       }
     };
@@ -56,7 +55,6 @@ const EditProduct = () => {
     e.preventDefault();
     setError('');
     
-    // Validate form
     if (!formData.name || !formData.description || !formData.price || !formData.category || !formData.countInStock) {
       setError('Please fill in all required fields');
       return;
@@ -65,7 +63,6 @@ const EditProduct = () => {
     try {
       setUpdating(true);
       
-      // Convert price and countInStock to numbers
       const productData = {
         ...formData,
         price: parseFloat(formData.price),
@@ -109,7 +106,6 @@ const EditProduct = () => {
       
       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
         <div className="grid grid-cols-1 gap-6">
-          {/* Product Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Product Name *
@@ -126,7 +122,6 @@ const EditProduct = () => {
             />
           </div>
           
-          {/* Product Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
               Description *
@@ -143,7 +138,6 @@ const EditProduct = () => {
             ></textarea>
           </div>
           
-          {/* Price and Stock */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
@@ -180,7 +174,6 @@ const EditProduct = () => {
             </div>
           </div>
           
-          {/* Category */}
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
               Category *
@@ -202,7 +195,6 @@ const EditProduct = () => {
             </select>
           </div>
           
-          {/* Image URL */}
           <div>
             <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
               Image URL
@@ -221,7 +213,6 @@ const EditProduct = () => {
             </p>
           </div>
           
-          {/* Submit Button */}
           <div className="pt-4">
             <button
               type="submit"
